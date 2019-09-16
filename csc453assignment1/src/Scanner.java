@@ -131,7 +131,13 @@ public class Scanner{
             result += nextToken.toString()
          return result
     */
-    return null;
+	String result = "";
+	StringBuilder inputStream = new StringBuilder(arg);
+	while (inputStream.length() > 0) {
+		Token nextToken = extractToken(inputStream);
+		result += nextToken.toString();
+	}
+    return result;
   }
 
 }
