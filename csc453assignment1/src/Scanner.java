@@ -82,9 +82,8 @@ public class Scanner{
     /* TODO #2: Extract the next token in the string, or report an error*/
 	char current = '\0', lookAhead = '\0';
 	if (stream.length() == 0) {
-		//throw new IllegalArgumentException("ERROR: Input stream is empty");
 		System.out.println("ERROR: Input stream is empty");
-		return null;
+		throw new IllegalArgumentException("ERROR: Input stream is empty");
 	}
 	
 	current = stream.charAt(0);
@@ -94,10 +93,8 @@ public class Scanner{
 	}
 	
 	if (!isValidInput(current)) {
-		//throw new IllegalArgumentException("ERROR: Illegal character in input stream");
 		System.out.println("ERROR: Illegal character in input stream");
-		stream.delete(0, 1);
-		return null;
+		throw new IllegalArgumentException("ERROR: Illegal character in input stream");
 	}
 	
 	if (Character.isWhitespace(lookAhead) || stream.length() == 1) {
@@ -139,9 +136,11 @@ public class Scanner{
 	String result = "";
 	StringBuilder inputStream = new StringBuilder(arg);
 	while (inputStream.length() > 0) {
-		Token nextToken = extractToken(inputStream);
-		if (nextToken == null) {
-			continue;
+		Token nextToken = null;
+		try {
+			nextToken = extractToken(inputStream);
+		} catch (IllegalArgumentException e) {
+			return "";
 		}
 		result += nextToken.toString();
 	}
