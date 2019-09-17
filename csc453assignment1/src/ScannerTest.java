@@ -26,6 +26,36 @@ public class ScannerTest{
                        "(this is only a subset of what we will test your code on)");
     System.out.println("*******************************************");
     System.out.println();
+    
+    result = test.extractTokens("");
+    expected = "";
+    assert(result.equals(expected));
+    
+    result = test.extractTokens("++");
+    expected = "|PLUS: +||PLUS: +|";
+    assert(result.equals(expected));
+    
+    result = test.extractTokens("<=->=");
+    expected = "|LTE: <=||MINUS: -||GTE: >=|";
+    assert(result.equals(expected));
+    
+    result = test.extractTokens("123+90");
+    expected = "|NUM: 123||PLUS: +||NUM: 90|";
+    assert(result.equals(expected));
+    
+    result = test.extractTokens("<=->=@");
+    expected = "";
+    assert(result.equals(expected));
+    
+    result = test.extractTokens("<= @ >=");
+    expected = "|";
+    assert(result.equals(expected));
+    
+    result = test.extractTokens("@<=->=");
+    expected = "";
+    assert(result.equals(expected));
+    
+    System.out.println("All tests cleared");
   }
 
   public static void main(String[] args){
