@@ -15,6 +15,7 @@ public class Scanner{
     }
   }
   
+  //Returns a boolean stating whether or not the character is a valid input character for the scanner
   private boolean isValidInput(char current) {
 	  if (Character.isDigit(current)) {
 		  return true;
@@ -38,6 +39,7 @@ public class Scanner{
 	  }
   }
   
+  //Returns the TokenType assosciated with a given character
   private TokenType getTokenType(char current, char lookAhead) {
 	  if (Character.isDigit(current)) {
 		  return TokenType.NUM;
@@ -66,6 +68,7 @@ public class Scanner{
 	  }
   }
   
+  //
   private String getFullNumber(StringBuilder stream) {
 	  String number = "";
 	  for (int i = 0; i < stream.length(); i++) {
@@ -78,25 +81,31 @@ public class Scanner{
 	  return number;
   }
 
+  //Extracts the first token in a given StingBuilder
+  //Returns a Token object representing this token
   public Token extractToken(StringBuilder stream){
-    /* TODO #2: Extract the next token in the string, or report an error*/
 	char current = '\0', lookAhead = '\0';
+	//If the stream is empty, then this is an improper call to the method
 	if (stream.length() == 0) {
 		System.out.println("ERROR: Input stream is empty");
 		throw new IllegalArgumentException("ERROR: Input stream is empty");
 	}
 	
 	current = stream.charAt(0);
+	//If the current character is a whitespace, it is not a token, so keep searching
 	if (Character.isWhitespace(current)) {
 		stream.delete(0, 1);
 		return extractToken(stream);
 	}
 	
+	//If the input is invalid, throw an exception
 	if (!isValidInput(current)) {
 		System.out.println("ERROR: Illegal character in input stream");
 		throw new IllegalArgumentException("ERROR: Illegal character in input stream");
 	}
 	
+	//If the next character is a whitespace or at the end of the String, we know the current
+	//token ends here
 	if (Character.isWhitespace(lookAhead) || stream.length() == 1) {
 		TokenType currentType = getTokenType(current, lookAhead);
 		stream.delete(0, 1);
@@ -106,11 +115,13 @@ public class Scanner{
 		lookAhead = stream.charAt(1);
 		TokenType currentType = getTokenType(current, lookAhead);
 		
+		//If the current character is a digit, we need to extract the whole number
 		if (currentType == TokenType.NUM) {
 			String fullNum = getFullNumber(stream);
 			stream.delete(0, fullNum.length());
 			return new Token(currentType, fullNum);
 		}
+		//the remaining operators are of length 1, but GTE and LTE are of length 2
 		else if (currentType == TokenType.GTE || currentType == TokenType.LTE) {
 			stream.delete(0, 2);
 			return new Token(currentType, current + "=");
@@ -122,24 +133,17 @@ public class Scanner{
 	}
   }
 
+  //Extracts Tokens from a given string, and returns them in their string representation
   public String extractTokens(String arg){
-    /* TODO #1: Finish this function to iterate over all tokens in the input string.
-
-       Pseudo code:
-       String extractTokens(String arg):
-         String result= "";
-         while(arg is not empty)
-            Token nextToken = extractToken(arg)
-            result += nextToken.toString()
-         return result
-    */
 	String result = "";
 	StringBuilder inputStream = new StringBuilder(arg);
 	while (inputStream.length() > 0) {
 		Token nextToken = null;
 		try {
 			nextToken = extractToken(inputStream);
-		} catch (IllegalArgumentException e) {
+		} 
+		//If an error occurs, just return an empty string
+		catch (IllegalArgumentException e) {
 			return "";
 		}
 		result += nextToken.toString();
