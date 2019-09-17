@@ -48,7 +48,7 @@ public class ScannerTest{
     assert(result.equals(expected));
     
     result = test.extractTokens("<= @ >=");
-    expected = "|";
+    expected = "";
     assert(result.equals(expected));
     
     result = test.extractTokens("@<=->=");

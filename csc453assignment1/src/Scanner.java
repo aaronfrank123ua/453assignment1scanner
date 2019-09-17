@@ -11,7 +11,7 @@ public class Scanner{
       this.tokenVal = tokenVal;
     }
     public String toString(){
-      return this.tokenType + ": " + this.tokenVal + " ";
+      return "|" + this.tokenType + ": " + this.tokenVal + "|";
     }
   }
   
